@@ -3,6 +3,7 @@ package com.atoudeft.controleur;
 import com.atoudeft.client.Client;
 import com.atoudeft.vue.PanneauDepot;
 import com.atoudeft.vue.PanneauPrincipal;
+import com.atoudeft.vue.PanneauRetrait;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -24,7 +25,10 @@ public class EcouteurOperationsCompte implements ActionListener {
         // Gérer le clic sur le bouton "Déposer"
         if ("DEPOT".equals(action)) {
             afficherPanneauDepot();
-        } else {
+        }else if ("RETRAIT".equals(action)) {
+            afficherPanneauRetrait();
+        }
+        else {
             // Envoi de la commande par défaut au serveur
             client.envoyer(action);
         }
@@ -58,4 +62,34 @@ public class EcouteurOperationsCompte implements ActionListener {
         dialog.setLocationRelativeTo(panneauPrincipal);  // Centrer par rapport au panneau principal
         dialog.setVisible(true);  // Afficher la fenêtre
     }
+
+    private void afficherPanneauRetrait() {
+        // Créer une instance de PanneauRetrait
+        PanneauRetrait panneauRetrait = new PanneauRetrait();
+
+        // Ajouter les écouteurs pour les boutons Ok et Annuler
+        panneauRetrait.addEcouteurs(e -> {
+            // Action pour le bouton Ok
+            String montant = panneauRetrait.getMontant();
+            if (!montant.isEmpty()) {
+                client.envoyer("RETRAIT " + montant); // Envoi au serveur
+                panneauPrincipal.afficherSolde("Cliquer sur un compte pour avoir le nouveau solde mis a jour"); // Affiche un état temporaire
+            }
+            // Fermer la fenêtre pop-up
+            SwingUtilities.getWindowAncestor(panneauRetrait).dispose();
+        }, e -> {
+            // Action pour le bouton Annuler
+            SwingUtilities.getWindowAncestor(panneauRetrait).dispose();
+        });
+
+        // Créer un JDialog pour afficher PanneauRetrait en pop-up
+        JDialog dialog = new JDialog();
+        dialog.setTitle("Retrait");
+        dialog.setModal(true);  // Rendre la fenêtre modale
+        dialog.setContentPane(panneauRetrait);
+        dialog.pack();
+        dialog.setLocationRelativeTo(panneauPrincipal);  // Centrer par rapport au panneau principal
+        dialog.setVisible(true);  // Afficher la fenêtre
+    }
+
 }
