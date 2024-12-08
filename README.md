@@ -3,7 +3,11 @@
 comment voir les comptes present dans le serveur:
 
 1- cliquer se connecter
+
+
 2- cliquer se deconnecter
+
+
 3- regarder dans la console du serveur
 
 les comptes sont dans le format NOMDUCOMPTE : NIP
