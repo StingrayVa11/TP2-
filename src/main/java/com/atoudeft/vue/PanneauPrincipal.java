@@ -7,6 +7,8 @@ import com.atoudeft.controleur.EcouteurOperationsCompte;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -23,7 +25,9 @@ public class PanneauPrincipal  extends JPanel {
     private DefaultListModel<String> numerosComptes;
     private JList<String> jlNumerosComptes;
     private JDesktopPane bureau;
-    //private JLabel soldeLabel = new JLabel("Solde : 0.00");
+    private List<String> historiqueOperations = new ArrayList<>();
+
+
 
 
     public PanneauPrincipal(Client client) {
@@ -53,12 +57,7 @@ public class PanneauPrincipal  extends JPanel {
         jlNumerosComptes.setBorder(BorderFactory.createTitledBorder("Comptes bancaires"));
         jlNumerosComptes.setPreferredSize(new Dimension(250,500));
 
-        //jlNumerosComptes = new JList<>();
-        // exemple d'affichage du compte apres l'avoir selectionne (a finir)
-        //jlNumerosComptes.setListData(new String[]{"Compte 1", "Compte 2", "Compte 3"});
 
-        //enregistrer l'ecouteur de double-clic
-        //jlNumerosComptes.addMouseListener(new EcouteurListeComptes(client, this));
 
 
 
@@ -110,4 +109,36 @@ public class PanneauPrincipal  extends JPanel {
     public void afficherSolde(String solde) {
         panneauOperationsCompte.afficherSolde(solde); // Mise à jour du label avec le solde
     }
+
+    public void enregistrerOperation(String operation) {
+        historiqueOperations.add(operation);
+        System.out.println("Opération enregistrée : " + operation); // Debug
+    }
+
+    public void afficherHistorique() {
+        // Créer une chaîne de texte pour l'historique
+        StringBuilder historiqueTexte = new StringBuilder();
+        for (String operation : historiqueOperations) {
+            historiqueTexte.append(operation).append("\n");
+        }
+
+        // Créer une zone de texte en lecture seule pour afficher l'historique
+        JTextArea zoneHistorique = new JTextArea(historiqueTexte.toString());
+        zoneHistorique.setEditable(false); // Lecture seule
+        zoneHistorique.setLineWrap(true); // Retour à la ligne automatique
+        zoneHistorique.setWrapStyleWord(true); // Retour à la ligne sur les mots entiers
+        zoneHistorique.setFont(new Font("Arial", Font.PLAIN, 14)); // Style uniforme
+
+        // Créer un JScrollPane pour permettre le défilement si nécessaire
+        JScrollPane defileur = new JScrollPane(zoneHistorique);
+        defileur.setPreferredSize(new Dimension(300, 200)); // Taille de la boîte
+
+        // Afficher la boîte de dialogue
+        JOptionPane.showMessageDialog(this, defileur,
+                "Historique du compte", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+
+
+
 }

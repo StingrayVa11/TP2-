@@ -1,10 +1,7 @@
 package com.atoudeft.controleur;
 
 import com.atoudeft.client.Client;
-import com.atoudeft.vue.PanneauDepot;
-import com.atoudeft.vue.PanneauPrincipal;
-import com.atoudeft.vue.PanneauRetrait;
-import com.atoudeft.vue.PanneauTransfert;
+import com.atoudeft.vue.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -29,98 +26,129 @@ public class EcouteurOperationsCompte implements ActionListener {
             afficherPanneauRetrait();
         } else if ("TRANSFER".equals(action)) {
             afficherPanneauTransfert();
-        } else {
+        } else if ("FACTURE".equals(action)) {
+            afficherPanneauFacture();
+        } else if ("HIST".equals(action)) {
+            panneauPrincipal.afficherHistorique();
+        }else {
             client.envoyer(action); // Commande par défaut
         }
     }
 
     private void afficherPanneauDepot() {
-        // Créer une instance de PanneauDepot
         PanneauDepot panneauDepot = new PanneauDepot();
 
-        // Ajouter les écouteurs pour les boutons Ok et Annuler
         panneauDepot.addEcouteurs(e -> {
-            // Action pour le bouton Ok
             String montant = panneauDepot.getMontant();
             if (!montant.isEmpty()) {
-                client.envoyer("DEPOT " + montant); // Envoi au serveur
-                panneauPrincipal.afficherSolde("Mise à jour en attente..."); // Affiche un état temporaire
+                client.envoyer("DEPOT " + montant);
+                panneauPrincipal.enregistrerOperation("Dépôt : " + montant + "$"); // Enregistre l'opération
+                panneauPrincipal.afficherSolde("Double cliquer pour actualiser le solde du compte");
             }
-            // Fermer la fenêtre pop-up
             SwingUtilities.getWindowAncestor(panneauDepot).dispose();
         }, e -> {
-            // Action pour le bouton Annuler
             SwingUtilities.getWindowAncestor(panneauDepot).dispose();
         });
 
-        // Créer un JDialog pour afficher PanneauDepot en pop-up
         JDialog dialog = new JDialog();
         dialog.setTitle("Dépôt");
-        dialog.setModal(true);  // Rendre la fenêtre modale
+        dialog.setModal(true);
         dialog.setContentPane(panneauDepot);
         dialog.pack();
-        dialog.setLocationRelativeTo(panneauPrincipal);  // Centrer par rapport au panneau principal
-        dialog.setVisible(true);  // Afficher la fenêtre
+        dialog.setLocationRelativeTo(panneauPrincipal);
+        dialog.setVisible(true);
     }
 
+
     private void afficherPanneauRetrait() {
-        // Créer une instance de PanneauRetrait
         PanneauRetrait panneauRetrait = new PanneauRetrait();
 
-        // Ajouter les écouteurs pour les boutons Ok et Annuler
         panneauRetrait.addEcouteurs(e -> {
-            // Action pour le bouton Ok
             String montant = panneauRetrait.getMontant();
             if (!montant.isEmpty()) {
-                client.envoyer("RETRAIT " + montant); // Envoi au serveur
-                panneauPrincipal.afficherSolde("Cliquer sur un compte pour avoir le nouveau solde mis a jour"); // Affiche un état temporaire
+                client.envoyer("RETRAIT " + montant);
+                panneauPrincipal.enregistrerOperation("Retrait : " + montant + "$"); // Enregistre l'opération
+                panneauPrincipal.afficherSolde("Cliquer sur un compte pour avoir le nouveau solde mis a jour");
             }
-            // Fermer la fenêtre pop-up
             SwingUtilities.getWindowAncestor(panneauRetrait).dispose();
         }, e -> {
-            // Action pour le bouton Annuler
             SwingUtilities.getWindowAncestor(panneauRetrait).dispose();
         });
 
-        // Créer un JDialog pour afficher PanneauRetrait en pop-up
         JDialog dialog = new JDialog();
         dialog.setTitle("Retrait");
-        dialog.setModal(true);  // Rendre la fenêtre modale
+        dialog.setModal(true);
         dialog.setContentPane(panneauRetrait);
         dialog.pack();
-        dialog.setLocationRelativeTo(panneauPrincipal);  // Centrer par rapport au panneau principal
-        dialog.setVisible(true);  // Afficher la fenêtre
+        dialog.setLocationRelativeTo(panneauPrincipal);
+        dialog.setVisible(true);
     }
 
+
     private void afficherPanneauTransfert() {
-        // Créer une instance de PanneauTransfert
         PanneauTransfert panneauTransfert = new PanneauTransfert();
 
-        // Ajouter les écouteurs pour les boutons Ok et Annuler
         panneauTransfert.addEcouteurs(e -> {
-            // Action pour le bouton Ok
             String montant = panneauTransfert.getMontant();
             String numeroCompte = panneauTransfert.getNumeroCompte();
             if (!montant.isEmpty() && !numeroCompte.isEmpty()) {
-                client.envoyer("TRANSFER " + montant + " " + numeroCompte); // Envoi au serveur
-                panneauPrincipal.afficherSolde("Cliquer sur un compte pour avoir le nouveau solde mis a jour"); // Affiche un état temporaire
+                client.envoyer("TRANSFER " + montant + " " + numeroCompte);
+                panneauPrincipal.enregistrerOperation("Transfert " + numeroCompte + " : " + montant + "$"); // Enregistre l'opération
+                panneauPrincipal.afficherSolde("Cliquer sur un compte pour avoir le nouveau solde mis a jour");
             }
-            // Fermer la fenêtre pop-up
             SwingUtilities.getWindowAncestor(panneauTransfert).dispose();
         }, e -> {
-            // Action pour le bouton Annuler
             SwingUtilities.getWindowAncestor(panneauTransfert).dispose();
         });
 
-        // Créer un JDialog pour afficher PanneauTransfert en pop-up
         JDialog dialog = new JDialog();
         dialog.setTitle("Transférer");
-        dialog.setModal(true);  // Rendre la fenêtre modale
+        dialog.setModal(true);
         dialog.setContentPane(panneauTransfert);
+        dialog.pack();
+        dialog.setLocationRelativeTo(panneauPrincipal);
+        dialog.setVisible(true);
+    }
+
+
+    private void afficherPanneauFacture() {
+        // Créer une instance de PanneauFacture
+        PanneauFacture panneauFacture = new PanneauFacture();
+
+        // Ajouter les écouteurs pour les boutons Ok et Annuler
+        panneauFacture.addEcouteurs(e -> {
+            // Action pour le bouton Ok
+            String montant = panneauFacture.getMontant();
+            String numeroFacture = panneauFacture.getNumeroFacture();
+            if (!montant.isEmpty() && !numeroFacture.isEmpty()) {
+                // Envoi de la commande au serveur
+                client.envoyer("FACTURE " + montant);
+
+                // Enregistrer l'opération localement
+                String operation = "Facture " + numeroFacture + " : " + montant + "$";
+                panneauPrincipal.enregistrerOperation(operation); // Appelle une méthode pour ajouter à l'historique
+
+                // Mettre à jour le solde dans l'interface (optionnel)
+                panneauPrincipal.afficherSolde("Cliquer sur un compte pour avoir le nouveau solde mis a jour");
+            }
+            // Fermer la fenêtre pop-up
+            SwingUtilities.getWindowAncestor(panneauFacture).dispose();
+        }, e -> {
+            // Action pour le bouton Annuler
+            SwingUtilities.getWindowAncestor(panneauFacture).dispose();
+        });
+
+        // Créer un JDialog pour afficher PanneauFacture en pop-up
+        JDialog dialog = new JDialog();
+        dialog.setTitle("Facture");
+        dialog.setModal(true);  // Rendre la fenêtre modale
+        dialog.setContentPane(panneauFacture);
         dialog.pack();
         dialog.setLocationRelativeTo(panneauPrincipal);  // Centrer par rapport au panneau principal
         dialog.setVisible(true);  // Afficher la fenêtre
     }
+
+
 
 
 }
