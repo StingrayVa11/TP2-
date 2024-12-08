@@ -22,13 +22,13 @@ public class EcouteurConnexion implements ActionListener {
         Object source = evt.getSource();
         String nomAction;
         if (source instanceof JButton) {
-            nomAction = ((JButton)source).getActionCommand();
+            nomAction = ((JButton) source).getActionCommand();
             switch (nomAction) {
                 case "NOUVEAU":
-                    client.envoyer("NOUVEAU "+panneauConnexion.getNumeroCompteClient()+":"+panneauConnexion.getNip());
+                    client.envoyer("NOUVEAU " + panneauConnexion.getNumeroCompteClient() + ":" + panneauConnexion.getNip());
                     break;
                 case "CONNECT":
-                    client.envoyer("CONNECT "+panneauConnexion.getNumeroCompteClient()+":"+panneauConnexion.getNip());
+                    client.envoyer("CONNECT " + panneauConnexion.getNumeroCompteClient() + ":" + panneauConnexion.getNip());
                     break;
             }
             panneauConnexion.effacer();

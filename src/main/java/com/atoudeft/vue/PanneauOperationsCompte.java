@@ -15,7 +15,7 @@ public class PanneauOperationsCompte extends JPanel {
         bDepot = new JButton("Déposer");
         bRetrait = new JButton("Retirer");
         bTransfert = new JButton("Transferer");
-        bFacture = new JButton("Payer Facture");
+        bFacture = new JButton("Facture");
         bHistorique = new JButton("Historique du compte");
         lblSolde = new JLabel("Solde : ");
 

@@ -34,12 +34,11 @@ public class PanneauPrincipal  extends JPanel {
 
         panneauOperationsCompte = new PanneauOperationsCompte();
         /**
-         * Tristan G
          * 2.1 créer un écouteur de type EcouteurOperationsCompte dans le panneau
          * principal et le fournir au panneau des opérations. Cette écouteur détient une
          * référence vers le client (fourni au constructeur);
          */
-        panneauOperationsCompte.setEcouteur(new EcouteurOperationsCompte(client));
+        panneauOperationsCompte.setEcouteur(new EcouteurOperationsCompte(client, this));
 
 
         panneauCompteClient = new JPanel();

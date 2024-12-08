@@ -14,31 +14,31 @@ import java.util.Scanner;
  */
 public class ProgrammeClientTP1 {
 
-	/**
-	 * Méthode principale du programme.
-	 *
-	 * @param args Arguments du programme
-	 */
-	public static void main(String[] args) {
+    /**
+     * Méthode principale du programme.
+     *
+     * @param args Arguments du programme
+     */
+    public static void main(String[] args) {
 
-		Scanner clavier = new Scanner(System.in);
-		Client client = new Client();
-		String saisie;
+        Scanner clavier = new Scanner(System.in);
+        Client client = new Client();
+        String saisie;
 
-		if (!client.connecter()) {
-			System.out.println("Serveur introuvable a l'adresse " + client.getAdrServeur()
-					+ " sur le port " + client.getPortServeur());
-			return;
-		}
-		System.out.println("Vous etes connectes au serveur à l'adresse " + client.getAdrServeur()
-				+ " sur le port " + client.getPortServeur());
-		System.out.println("Le serveur vous renvoie votre texte converti en majuscules");
+        if (!client.connecter()) {
+            System.out.println("Serveur introuvable a l'adresse " + client.getAdrServeur()
+                    + " sur le port " + client.getPortServeur());
+            return;
+        }
+        System.out.println("Vous etes connectes au serveur à l'adresse " + client.getAdrServeur()
+                + " sur le port " + client.getPortServeur());
+        System.out.println("Le serveur vous renvoie votre texte converti en majuscules");
 
-		System.out.println("Saisissez vos textes (EXIT pour quitter) :");
-		do {
-			saisie = clavier.nextLine();
-			client.envoyer(saisie);
-		}while (!"EXIT".equals(saisie));
-		//Lorsque le client envoie "EXIT", le serveur répond "END." et le gestionnaire d'événement déconnecte le client
-	}
+        System.out.println("Saisissez vos textes (EXIT pour quitter) :");
+        do {
+            saisie = clavier.nextLine();
+            client.envoyer(saisie);
+        } while (!"EXIT".equals(saisie));
+        //Lorsque le client envoie "EXIT", le serveur répond "END." et le gestionnaire d'événement déconnecte le client
+    }
 }
